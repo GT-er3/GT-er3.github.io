@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hang Yu</title>
+<meta name="description" content="Hang Yu — mechanistic interpretability of large language models, activation steering, and layer-wise causal analysis.">
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #16181d;
+    --muted: #61656e;
+    --rule: #e4e6ea;
+    --accent: #2f4db8;
+    --accent-soft: #eef1fb;
+    --card: #fafbfc;
+    --maxw: 46rem;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #131417;
+      --fg: #e8e9ec;
+      --muted: #9aa0aa;
+      --rule: #2a2d33;
+      --accent: #9db2ff;
+      --accent-soft: #1c2030;
+      --card: #191b20;
+    }
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    padding: 4.5rem 1.5rem 5rem;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+                 Arial, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 17px;
+    line-height: 1.68;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  main { max-width: var(--maxw); margin: 0 auto; }
+
+  /* ---------- header ---------- */
+  header { margin-bottom: 3rem; }
+
+  h1 {
+    margin: 0 0 .35rem;
+    font-size: 2.15rem;
+    font-weight: 650;
+    letter-spacing: -.022em;
+    line-height: 1.2;
+  }
+
+  h1 .zh {
+    font-size: 1.3rem;
+    font-weight: 450;
+    color: var(--muted);
+    letter-spacing: .04em;
+    margin-left: .5rem;
+    white-space: nowrap;
+  }
+
+  .tagline {
+    margin: 0 0 1.15rem;
+    color: var(--muted);
+    font-size: 1rem;
+  }
+
+  .contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem .6rem;
+    align-items: center;
+  }
+
+  .contact a {
+    display: inline-block;
+    padding: .3rem .72rem;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    background: var(--card);
+    font-size: .9rem;
+    text-decoration: none;
+    color: var(--fg);
+    transition: border-color .15s ease, background .15s ease;
+  }
+
+  .contact a:hover {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  /* ---------- sections ---------- */
+  section { margin-bottom: 2.6rem; }
+
+  h2 {
+    margin: 0 0 1rem;
+    padding-bottom: .45rem;
+    border-bottom: 1px solid var(--rule);
+    font-size: .8rem;
+    font-weight: 600;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  h3 {
+    margin: 1.6rem 0 .5rem;
+    font-size: 1rem;
+    font-weight: 620;
+    letter-spacing: -.005em;
+  }
+
+  p { margin: 0 0 1rem; }
+  p:last-child { margin-bottom: 0; }
+
+  strong { font-weight: 620; }
+
+  a { color: var(--accent); }
+
+  ul { margin: 0 0 1rem; padding-left: 1.15rem; }
+  li { margin-bottom: .4rem; }
+  li:last-child { margin-bottom: 0; }
+
+  .interests {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .45rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: .9rem;
+  }
+
+  .interests li {
+    margin: 0;
+    padding: .26rem .68rem;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    background: var(--card);
+    color: var(--muted);
+  }
+
+  footer {
+    margin-top: 3.5rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--rule);
+    font-size: .85rem;
+    color: var(--muted);
+  }
+
+  @media (max-width: 30rem) {
+    body { padding: 2.75rem 1.1rem 3rem; font-size: 16px; }
+    h1 { font-size: 1.75rem; }
+    h1 .zh { display: block; margin: .25rem 0 0; }
+  }
+</style>
+</head>
+<body>
+<main>
+
+  <header>
+    <h1>Hang Yu <span class="zh">余杭</span></h1>
+    <p class="tagline">Mechanistic interpretability · Activation steering · Large language models</p>
+    <div class="contact">
+      <a href="mailto:17839042291@163.com">17839042291@163.com</a>
+      <a href="https://github.com/GT-er3">github.com/GT-er3</a>
+    </div>
+  </header>
+
+  <section id="research">
+    <h2>Research</h2>
+
+    <p>
+      I study the <strong>mechanistic interpretability</strong> of large language models,
+      with a focus on <strong>activation steering</strong> — controlling a model's behaviour
+      by injecting a direction vector into one of its intermediate layers.
+    </p>
+
+    <p>
+      A central puzzle in this line of work is that the layer where steering works best
+      varies sharply from one model to the next. Existing methods either search for that
+      layer or predict it from black-box representation statistics, but neither explains
+      <em>why</em> the optimal depth differs. I approach this as a mechanism question,
+      decomposing the injected signal into two terms:
+    </p>
+
+    <ul>
+      <li>
+        <strong>Downstream amplification</strong> — how much the injected signal is
+        amplified as it propagates toward the output.
+      </li>
+      <li>
+        <strong>Direct passthrough</strong> — how much of it reaches the readout unchanged.
+      </li>
+    </ul>
+
+    <p>
+      Across <strong>13 models spanning 0.5B–9B parameters</strong> and two gated-activation
+      families (<strong>SwiGLU</strong> and <strong>GeGLU</strong>), I find that the amplification
+      ratio decreases with depth (Spearman ρ &lt; 0 in 13/13 models; bootstrap 95% CI excludes
+      zero in 7/13), while the injection peak is deep in every GeGLU model and spreads across
+      shallow, mid, and deep layers in SwiGLU models.
+    </p>
+
+    <h3>How much of this is the instrument?</h3>
+
+    <p>
+      A second thread concerns measurement. Replicating the same sweep under each model's own
+      LM-head readout, the two readouts agree on both the peak band and the decay sign in only
+      <strong>6/13</strong> models, and the probe readout misreports the peak of the unblocked
+      injection curve in <strong>5/13</strong>. The decomposition is therefore
+      <strong>readout-dependent</strong> rather than readout-invariant. What it supports is a
+      <em>description</em>, not a <em>prediction</em>, of why the optimal depth is model-specific.
+    </p>
+  </section>
+
+  <section id="interests">
+    <h2>Interests</h2>
+    <ul class="interests">
+      <li>Mechanistic interpretability</li>
+      <li>Activation steering</li>
+      <li>Representation engineering</li>
+      <li>Layer-wise causal analysis</li>
+      <li>Path patching &amp; direct effects</li>
+      <li>Validity of interpretability measurements</li>
+    </ul>
+  </section>
+
+  <section id="code">
+    <h2>Code</h2>
+    <p>
+      Reproducibility artefacts and analysis code are released on
+      <a href="https://github.com/GT-er3">GitHub</a>.
+    </p>
+  </section>
+
+  <footer>
+    Hang Yu · <a href="mailto:17839042291@163.com">17839042291@163.com</a>
+  </footer>
+
+</main>
+</body>
+</html>
